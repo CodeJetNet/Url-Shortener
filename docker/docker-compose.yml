@@ -1,0 +1,36 @@
+version: '2'
+services:
+  url_shortener:
+    stdin_open: true
+    tty: true
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+    volumes:
+    - ../:/app
+    ports:
+    - "80:80"
+    environment:
+      ENVIRONMENT: development
+      DATABASE_URL: "mysql://root:123@maria:3306/url_shortener"
+    networks:
+    - codejetnet
+  maria:
+    image: mariadb:10.2
+    ports:
+    - "3306:3306"
+    expose:
+    - 3306
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_DATABASE: url_shortener
+    volumes:
+    - url_shortener_mariadb:/var/lib/mysql
+    networks:
+    - codejetnet
+volumes:
+  url_shortener_mariadb:
+    driver: local
+networks:
+  codejetnet:
+    driver: "bridge"

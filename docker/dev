@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Attempting to grab the host machine IP to set as XDEBUG.remote_host
+export XDEBUG_HOST=${XDEBUG_HOST:-`ifconfig -a | grep inet | grep 0xffffff00 | cut -d\  -f2 | head -n 1`}
+
+# This must match the service name in the docker-compose.yml file.
+# This value is also used as the XDEBUG server name for configuring PHPStorm
+export SERVICE_NAME="docker-skeleton-php-nginx-app"
+
+TTY=""
+
+## CI sends BUILD_NUMBER env variable.
+if [ ! -z "$BUILD_NUMBER" ]; then
+    COMPOSE_FILE="ci"
+    DOCKER_HOST="unix://var/run/docker.sock"
+    # Disable pseudo TTY for CI
+    TTY="-T"
+fi
+
+## Perhaps add something in here for Windows/WSL defaults.
+UNAMESTR=`uname`
+if [ "$UNAMESTR" == 'Linux' ] || [ "$UNAMESTR" == 'Darwin' ]; then
+    COMPOSE="docker-compose -f docker-compose.yml"
+else
+    COMPOSE="docker-compose -f docker-compose.yml --no-ansi"
+fi
+
+if [ $# -gt 0 ];then
+    if [ "$1" == "exec" ]; then
+        shift 1
+        $COMPOSE exec $TTY \
+            $SERVICE_NAME \
+            sh -c "cd /app && $@"
+    else
+        $COMPOSE "$@"
+    fi
+else
+    $COMPOSE ps
+fi
