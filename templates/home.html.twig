@@ -1,12 +1,19 @@
-{# templates/lucky/number.html.twig #}
 {% extends "/base.html.twig" %}
 
 {% block body %}
-   <div class="container">
-       <div class="row">
-           <div class="col-12">
-               <h1>URL Shortener</h1>
-           </div>
-       </div>
-   </div>
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h1>URL Shortener</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <form method="post" action="/create">
+                    <input type="text" name="url" placeholder="https://codejet.net" required/>
+                    <button class="btn btn-success">Create</button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endblock %}
