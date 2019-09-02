@@ -4,10 +4,10 @@ services:
     stdin_open: true
     tty: true
     build:
-      context: ./app
+      context: .
       dockerfile: Dockerfile
     volumes:
-    - ../:/app
+    - .:/app
     ports:
     - "80:80"
     environment:
