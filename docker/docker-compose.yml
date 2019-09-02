@@ -13,6 +13,7 @@ services:
     environment:
       ENVIRONMENT: development
       DATABASE_URL: "mysql://root:123@maria:3306/url_shortener"
+      SHORT_URL_PREFIX: http://localhost/
     networks:
     - codejetnet
   maria:

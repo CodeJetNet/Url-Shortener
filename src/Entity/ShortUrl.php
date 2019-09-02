@@ -43,6 +43,16 @@ class ShortUrl
         return $this;
     }
 
+    public function getShortUrl(): ?string
+    {
+        $prefix = getenv('SHORT_URL_PREFIX');
+        if(!$prefix) {
+            throw new \Exception('Missing SHORT_URL_PREFIX environment variable.');
+        }
+
+        return rtrim($prefix,'/') . '/' . $this->code;
+    }
+
     public function getCode(): ?string
     {
         return $this->code;
